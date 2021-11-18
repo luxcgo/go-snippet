@@ -6,11 +6,20 @@ import (
 )
 
 var (
-	// map[oldString]newString
-	dict = map[string]string{
-		"a": "A",
-		"b": "B",
-		"c": "C",
+	// []map[oldString]newString
+	dict = []map[string]string{
+		{
+			"I":    "U",
+			"love": "LOVE",
+		},
+		{
+			"I":    "HE",
+			"love": "LOVES",
+		},
+		{
+			"I":    "SHE",
+			"love": "LOVES",
+		},
 	}
 
 	newReplacer = func(dict map[string]string) *strings.Replacer {
@@ -26,12 +35,17 @@ var (
 )
 
 func main() {
-	r := newReplacer(dict)
 	dat, _ := os.ReadFile("in.txt")
 	old := string(dat)
-	new := r.Replace(old)
 
 	out, _ := os.Create("out.txt")
 	defer out.Close()
-	out.WriteString(new)
+
+	for _, d := range dict {
+		r := newReplacer(d)
+		new := r.Replace(old)
+		out.WriteString(new)
+		out.WriteString("\n\n")
+	}
+
 }
